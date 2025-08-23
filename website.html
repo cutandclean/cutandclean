@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1020">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Cut & Clean — Haircuts • Lawn Mowing • Car Wash • Window Cleaning • Power Hosing</title>
+  <meta name="description" content="Cut & Clean: Haircuts, lawn mowing, car wash, window cleaning, and power hosing. Book an appointment online in seconds." />
+  <style>
+    :root{
+      --bg:#0b1020; --surface:#111735; --muted:#8ea1c2; --text:#eaf0ff;
+      --accent:#6dd3ff; --accent-2:#90ffb3; --danger:#ff6b6b; --ok:#45d483;
+      --input-bg:#0f1530; --input-border:rgba(255,255,255,.14);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;height:100%;background:var(--bg);color:var(--text);
+      font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",sans-serif;
+      scroll-behavior:smooth;
+    }
+    a{color:var(--accent);text-decoration:none}
+    img,svg{max-width:100%;height:auto;display:block}
+    .container{max-width:1100px;margin:0 auto;padding:clamp(12px,3vw,24px)}
+    header{position:sticky;top:0;background:#0b1020;z-index:10}
+    .nav{display:flex;align-items:center;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .logo{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;
+      background:linear-gradient(135deg, var(--accent), var(--accent-2));color:#001b22;font-weight:900}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#001b22;font-weight:800;cursor:pointer;border:0}
+    .nav a{padding:10px 12px;border-radius:10px;white-space:nowrap}
+    .nav a.cta{background:linear-gradient(135deg,var(--accent), var(--accent-2));color:#001b22;font-weight:700}
+
+    /* ALWAYS top-right nav */
+    #mainNav{
+      display:flex !important; align-items:center; gap:12px; flex-wrap:nowrap;
+      margin-left:auto; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+    }
+    #mainNav::-webkit-scrollbar{display:none}
+    @media (max-width: 420px){ .nav a{padding:8px 10px;font-size:14px} }
+
+    .hero{
+      display:grid;gap:clamp(16px,3vw,32px);align-items:center;
+      grid-template-columns: 1.2fr 1fr; padding:40px 0;
+    }
+    @media (max-width: 900px){ .hero{grid-template-columns:1fr} }
+    .hero h1{font-size:clamp(24px,4.2vw,42px);line-height:1.15;margin:.2em 0}
+    .hero p{color:var(--muted);font-size:clamp(14px,1.8vw,16px)}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid rgba(255,255,255,.1);
+      border-radius:999px;color:var(--muted);font-weight:600}
+
+    .section{padding:48px 0}
+    .cards{display:grid;grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));gap:16px;margin:24px 0}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px;min-height:210px}
+    .icon{width:28px;height:28px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.08);margin-bottom:8px}
+    .card h3{margin:8px 0 6px}
+    .card p{margin:0;color:var(--muted)}
+
+    /* PRICING in one row (horizontal scroll on narrow) */
+    .pricing-row{
+      display:grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(220px, 1fr);
+      gap:24px;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+      padding-bottom:4px;
+    }
+    .pricing-row::-webkit-scrollbar{height:6px}
+    .pricing-row::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:999px}
+
+    form{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:20px}
+    label{display:block;margin:10px 0 6px;color:var(--muted);font-weight:600}
+    input,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--input-border);
+      background:var(--input-bg);color:#eaf0ff}
+    .price{display:flex;align-items:baseline;gap:8px}
+    .price .num{font-size:28px;font-weight:900}
+    .footer{padding:36px 0;border-top:1px solid rgba(255,255,255,.08);color:var(--muted)}
+    .note{margin-top:8px;color:var(--muted);font-size:.92rem}
+    .error{color:var(--danger)!important}
+    .ok{color:var(--ok)!important}
+
+    /* Sticky Call button — ALWAYS visible bottom-right */
+    .callnow{
+      position:fixed; right:16px; bottom:16px; z-index:9999;
+      display:inline-flex; align-items:center; gap:8px;
+      text-decoration:none; padding:12px 16px; border-radius:999px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      color:#001b22; font-weight:900; box-shadow:0 8px 24px rgba(0,0,0,.25);
+    }
+
+    /* reCAPTCHA-style box left aligned */
+    .captcha {
+      width: 304px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .captcha label{ margin:0; color:var(--text); font-weight:600; }
+    .captcha input[type="checkbox"]{ width:auto; }
+
+    /* ===== Fullscreen white overlay for Thank You ===== */
+    .overlay {
+      position: fixed; inset: 0; background:#fff; color:#111735; 
+      display: none; z-index: 99999;
+    }
+    .overlay.show { display: grid; place-items: center; }
+    .ty-card{
+      width:min(560px, 92vw);
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,.12);
+      padding: 24px;
+      background: #fff;
+    }
+    .ty-card h2{ margin:0 0 12px; font-size:28px; }
+    .ty-row{ display:flex; gap:8px; margin:8px 0; }
+    .ty-label{ width:120px; color:#666; font-weight:600; }
+    .ty-value{ flex:1; word-break:break-word; }
+    .ty-actions{ margin-top:16px; display:flex; gap:10px; justify-content:flex-end; }
+    .close-btn{
+      border:0; border-radius:12px; padding:10px 14px; cursor:pointer;
+      background:#111735; color:#fff; font-weight:700;
+    }
+    .ok-btn{
+      border:0; border-radius:12px; padding:10px 14px; cursor:pointer;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#001b22; font-weight:900;
+    }
+
+    /* ==== Reviews (styles) ==== */
+    #reviews .review-form .stars{
+      display:flex; gap:6px; align-items:center; margin:6px 0 10px;
+    }
+    #reviews .stars button{
+      background:none; border:0; cursor:pointer; font-size:24px; line-height:1;
+      color:rgba(255,255,255,.35);
+    }
+    #reviews .stars button.active,
+    #reviews .stars button:hover,
+    #reviews .stars button:focus{ color:#f6c244; }
+    #reviews .reviews-list{
+      display:grid; gap:12px; margin-top:16px; padding:0; list-style:none;
+    }
+    #reviews .review-item{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px; padding:14px;
+    }
+    #reviews .review-head{
+      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:6px;
+    }
+    #reviews .review-name{ font-weight:800; }
+    #reviews .review-stars{ letter-spacing:2px; color:#f6c244; }
+    #reviews small{ color:var(--muted); }
+    #reviews .review-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:8px; }
+    #reviews .del-btn, #reviews .clear-btn{
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);
+      color:#eaf0ff; padding:8px 10px; border-radius:10px; cursor:pointer;
+    }
+    #reviews .del-btn:hover, #reviews .clear-btn:hover{ background:rgba(255,255,255,.12); }
+
+    @media (min-width: 1400px){ .container{max-width:1200px} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand"><div class="logo">CC</div><span>Cut &amp; Clean</span></div>
+      <nav id="mainNav">
+        <a href="#services">Services</a>
+        <a href="#prices">Pricing</a>
+        <a href="#book" class="cta">Book Now</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <div class="pill">Local services • Online bookings</div>
+        <h1>From heads to hedges, driveways to dashboards — if it grows, glows or gets dirty, I'll sort it!</h1>
+        <p>Fast, reliable and affordable — book an appointment in 30 seconds.</p>
+      </div>
+      <div>
+        <!-- 5-tile illustration -->
+        <svg viewBox="0 0 380 220" width="100%" height="100%" role="img" aria-label="Service icons">
+          <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6dd3ff"/><stop offset="1" stop-color="#90ffb3"/></linearGradient></defs>
+          <rect x="0" y="0" width="380" height="220" rx="18" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.08)"/>
+          <g transform="translate(16,24)"><rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/><text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">✂️ Haircuts</text></g>
+          <g transform="translate(136,24)"><rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/><text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🌿 Lawn</text></g>
+          <g transform="translate(256,24)"><rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/><text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🚗 Car</text></g>
+          <g transform="translate(76,110)"><rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/><text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🪟 Windows</text></g>
+          <g transform="translate(196,110)"><rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/><text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🧼 Power</text></g>
+        </svg>
+      </div>
+    </section>
+
+    <section id="services" class="section">
+      <h2>Services</h2>
+      <div class="cards">
+        <article class="card"><div class="icon">✂️</div><h3>Haircuts</h3><p>Basic haircut</p><p>Beard</p><p>Haircut &amp; Beard</p></article>
+        <article class="card"><div class="icon">🌿</div><h3>Lawn Mowing / Gardening</h3><p>Cut</p><p>Strim</p><p>General</p></article>
+        <article class="card"><div class="icon">🚗</div><h3>Car Wash</h3><p>Wash</p><p>Mini valet</p><p>Full valet</p></article>
+        <article class="card"><div class="icon">🪟</div><h3>Window Cleaning</h3><p>Basic</p><p>Advanced (limescale removal)</p></article>
+        <article class="card"><div class="icon">🧼</div><h3>Power Hosing</h3><p>Patio</p><p>Driveway</p><p>House exterior</p></article>
+      </div>
+    </section>
+
+    <section id="prices" class="section">
+      <h2>Pricing</h2>
+      <div class="pricing-row">
+        <div class="card">
+          <h3>Haircuts</h3>
+          <p class="price"><span class="num">€15</span> basic</p>
+          <p class="price"><span class="num">€20</span> haircut + beard</p>
+          <p class="price"><span class="num">€10</span> beard only</p>
+        </div>
+
+        <div class="card">
+          <h3>Lawn Mowing</h3>
+          <p class="price"><span class="num">From</span></p>
+          <p class="price"><span class="num">€30</span> an hour</p>
+          <p class="price"><span class="num">Or</span></p>
+          <p class="price"><span class="num">€200</span> per day</p>
+        </div>
+
+        <div class="card" id="carwash-card">
+          <h3>Car Wash</h3>
+          <p class="price"><span class="num">€10</span> car</p>
+          <p class="price"><span class="num">€12–15</span> suv / van</p>
+
+          <details id="cw-details" style="margin-top:8px;">
+            <summary class="btn" style="padding:8px 12px;font-size:.9rem;list-style:none;display:inline-block;cursor:pointer;">
+              More options
+            </summary>
+
+            <div style="margin-top:12px;">
+              <p class="price"><span class="num">From</span></p>
+              <p class="price"><span class="num">€20</span> mini valet</p>
+              <p class="price"><span class="num">From</span></p>
+              <p class="price"><span class="num">€100</span> full valet</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <h3>Window Cleaning</h3>
+          <p class="price"><span class="num">From</span></p>
+          <p class="price"><span class="num">€30</span></p>
+        </div>
+
+        <div class="card">
+          <h3>Power Hosing</h3>
+          <p class="price"><span class="num">From</span></p>
+          <p class="price"><span class="num">€30</span> an hour</p>
+          <p class="price"><span class="num">Or</span></p>
+          <p class="price"><span class="num">€200</span> a day</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="book" class="section">
+      <h2>Book an Appointment</h2>
+      <form id="bookingForm" method="POST" action="https://formspree.io/f/xjkonwor">
+        <input type="hidden" name="_subject" value="New Booking — Cut & Clean" />
+        <input type="hidden" name="form-name" value="cut-clean-booking" />
+        <input type="hidden" name="booking_code" id="booking_code" />
+
+        <label for="name">Full name*</label>
+        <input id="name" name="name" required autocomplete="name" inputmode="text" />
+
+        <label for="phone">Mobile*</label>
+        <input id="phone" name="phone" required type="tel" autocomplete="tel" inputmode="tel" />
+
+        <label for="email">Email*</label>
+        <input id="email" name="email" type="email" required autocomplete="email" inputmode="email" />
+
+        <label for="notes">Notes</label>
+        <textarea id="notes" name="notes" placeholder="Preferred times and dates"></textarea>
+
+        <!-- Left-aligned reCAPTCHA-style box -->
+        <div class="captcha" role="group" aria-labelledby="captcha-label">
+          <input type="checkbox" id="notrobot" required aria-describedby="captcha-label">
+          <label id="captcha-label" for="notrobot">I’m not a robot*</label>
+        </div>
+
+        <button class="btn" type="submit" style="margin-top:12px;">✅ Submit</button>
+        <p id="formMsg" role="status"></p>
+      </form>
+      <p class="note">We’ll confirm your preferred times by phone or email.</p>
+    </section>
+
+    <!-- REVIEWS (seeded + local) -->
+    <section id="reviews" class="section">
+      <h2>Reviews</h2>
+
+      <div class="card">
+        <form id="reviewForm" class="review-form" autocomplete="off">
+          <label for="rev-name">Name*</label>
+          <input id="rev-name" name="name" required inputmode="text" />
+
+          <label>Rating*</label>
+          <div id="starWidget" class="stars" role="radiogroup" aria-label="Rating 1 to 5 stars">
+            <button type="button" class="star" data-star="1" aria-label="1 star">★</button>
+            <button type="button" class="star" data-star="2" aria-label="2 stars">★</button>
+            <button type="button" class="star" data-star="3" aria-label="3 stars">★</button>
+            <button type="button" class="star" data-star="4" aria-label="4 stars">★</button>
+            <button type="button" class="star" data-star="5" aria-label="5 stars">★</button>
+          </div>
+
+          <label for="rev-comment">Comment*</label>
+          <textarea id="rev-comment" name="comment" required placeholder="Write your review..."></textarea>
+
+          <button class="btn" type="submit" style="margin-top:10px;">Submit Review</button>
+          <p id="reviewMsg" role="status" style="margin:8px 0 0;"></p>
+        </form>
+
+      <ul id="reviewsList" class="reviews-list"></ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container"><small>© <span id="year"></span> Cut &amp; Clean</small></div>
+  </footer>
+
+  <!-- Sticky Call button — ALL devices, ALWAYS bottom-right -->
+  <a class="callnow" href="tel:+306971580635" aria-label="Call Cut & Clean now">Call now</a>
+
+  <!-- THANK YOU OVERLAY -->
+  <div class="overlay" id="thankOverlay" aria-modal="true" role="dialog" aria-labelledby="ty-title">
+    <div class="ty-card">
+      <h2 id="ty-title">Thank you!</h2>
+      <div class="ty-row"><div class="ty-label">Name</div><div class="ty-value" id="ty-name"></div></div>
+      <div class="ty-row"><div class="ty-label">Email</div><div class="ty-value" id="ty-email"></div></div>
+      <div class="ty-row"><div class="ty-label">Code</div><div class="ty-value" id="ty-code"></div></div>
+      <div class="ty-row" id="ty-notes-row" style="display:none;">
+        <div class="ty-label">Notes</div><div class="ty-value" id="ty-notes"></div>
+      </div>
+      <div class="ty-actions">
+        <button class="close-btn" id="ty-close">Close</button>
+        <button class="ok-btn" id="ty-ok">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Change "More options" <summary> to "Less options" when opened
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('details').forEach((det)=>{
+        const summary = det.querySelector('summary');
+        if(!summary) return;
+        function updateLabel(){ summary.textContent = det.open ? 'Less options' : 'More options'; }
+        det.addEventListener('toggle', updateLabel);
+        updateLabel();
+      });
+    });
+
+    // ===== Booking form logic (Formspree) =====
+    const form = document.getElementById('bookingForm');
+    const msg  = document.getElementById('formMsg');
+    function uid(){ return 'CC-' + Math.random().toString(36).slice(2,7).toUpperCase(); }
+    function captchaOK(){ const box = document.getElementById('notrobot'); return box && box.checked; }
+
+    function showThankYou({name, email, code, notes}) {
+      const ov = document.getElementById('thankOverlay');
+      const setText = (id, value) => { document.getElementById(id).textContent = value || ''; };
+      setText('ty-name', name || '-'); setText('ty-email', email || '-'); setText('ty-code', code || '-');
+      if (notes && notes.trim()) { setText('ty-notes', notes.trim()); document.getElementById('ty-notes-row').style.display = ''; }
+      else { document.getElementById('ty-notes-row').style.display = 'none'; }
+      ov.classList.add('show'); document.body.style.overflow = 'hidden';
+      const close = () => { ov.classList.remove('show'); document.body.style.overflow = ''; };
+      document.getElementById('ty-close').onclick = close; document.getElementById('ty-ok').onclick = close;
+      ov.addEventListener('click', (e)=>{ if(e.target === ov) close(); }, { once:true });
+    }
+
+    if(form){
+      form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        for (const id of ['name','phone','email']) { const el = document.getElementById(id); if(!el || !el.value){ msg.textContent = 'Please fill all required fields.'; msg.classList.remove('ok'); msg.classList.add('error'); return; } }
+        if (!captchaOK()){ msg.textContent = 'Please tick “I’m not a robot”.'; msg.classList.remove('ok'); msg.classList.add('error'); return; }
+        const code = uid(); const hiddenCode = document.getElementById('booking_code'); if(hiddenCode) hiddenCode.value = code;
+        const data = new FormData(form);
+        try{
+          const resp = await fetch(form.action, { method: 'POST', headers: { 'Accept': 'application/json' }, body: data });
+          if (resp.ok) {
+            const name  = data.get('name'); const email = data.get('email'); const notes = data.get('notes');
+            showThankYou({ name, email, code, notes });
+            msg.textContent = ''; msg.classList.remove('ok','error'); form.reset();
+          } else {
+            const error = await resp.json().catch(()=>({}));
+            msg.textContent = (error && error.error) ? error.error : 'Something went wrong. Please try again.';
+            msg.classList.remove('ok'); msg.classList.add('error');
+          }
+        } catch {
+          msg.textContent = 'Network error. Please try again.';
+          msg.classList.remove('ok'); msg.classList.add('error');
+        }
+      });
+    }
+  </script>
+
+  <!-- Reviews: seeded + localStorage demo -->
+  <script>
+  (() => {
+    const LS_KEY = 'cc_reviews_demo';
+    let currentRating = 0;
+    let reviewsLocal = [];
+
+    // ====== 7 SEEDED (permanent) reviews shown on all browsers ======
+    const seededReviews = [
+      {
+        id: 'seed-mark',
+        name: 'Mark',
+        rating: 5,
+        comment: "Mateo cut my hair and my two boys hair, they get very nervous and he put them at ease immediately. On Mateo's advice, the boys had great new styles and they have never looked better! Thanks Mateo, we will go nowhere else now!",
+        date: '2025-08-01T10:00:00Z',
+        seed: true
+      },
+      {
+        id: 'seed-claire',
+        name: 'Claire',
+        rating: 5,
+        comment: "Mateo was very professional. Cut our hedges, said would be done in a day and he worked throughout. Very hard worker and great result. We have scheduled regular trims. THANK YOU! :)",
+        date: '2025-08-05T12:30:00Z',
+        seed: true
+      },
+      {
+        id: 'seed-james',
+        name: 'James',
+        rating: 5,
+        comment: "Power hosed our driveway — turned up on time, spotless finish and fair price. Looks brand new.",
+        date: '2025-07-28T09:15:00Z',
+        seed: true
+      },
+      {
+        id: 'seed-aoife',
+        name: 'Aoife',
+        rating: 5,
+        comment: "Window cleaning was brilliant. Frames and sills carefully done, everything sparkling. Highly recommend!",
+        date: '2025-07-30T16:45:00Z',
+        seed: true
+      },
+      {
+        id: 'seed-liam',
+        name: 'Liam',
+        rating: 5,
+        comment: "Full car valet — car looked like new afterwards. Small delay starting but he kept me informed. Great job overall.",
+        date: '2025-08-10T14:10:00Z',
+        seed: true
+      },
+      {
+        id: 'seed-sarah',
+        name: 'Sarah',
+        rating: 5,
+        comment: "Lawn mowing & edging — super neat lines and tidy clean-up. We’ve booked fortnightly visits now.",
+        date: '2025-08-15T11:20:00Z',
+        seed: true
+      },
+      {
+        id: 'seed-mh',
+        name: 'MH',
+        rating: 5,
+        comment: "Made an excellent job of my Mustang! Mini valet and would have thought it had a full one! Amazing value from a true gent! Superb work!",
+        date: '2025-08-20T15:45:00Z',
+        seed: true
+      }
+    ];
+
+    // Elements
+    const rForm = document.getElementById('reviewForm');
+    const nameEl = document.getElementById('rev-name');
+    const commentEl = document.getElementById('rev-comment');
+    const starsWrap = document.getElementById('starWidget');
+    const rMsg = document.getElementById('reviewMsg');
+    const list = document.getElementById('reviewsList');
+    const clearBtn = document.getElementById('clearReviews');
+
+    if(!rForm || !starsWrap || !list) return;
+
+    // Helpers
+    function loadLocal(){
+      try { reviewsLocal = JSON.parse(localStorage.getItem(LS_KEY)) || []; }
+      catch { reviewsLocal = []; }
+    }
+    function saveLocal(){
+      try { localStorage.setItem(LS_KEY, JSON.stringify(reviewsLocal)); } catch {}
+    }
+    function starString(n){
+      const full = '★'.repeat(n);
+      const empty = '☆'.repeat(5 - n);
+      return full + empty;
+    }
+    function renderStars(n){
+      currentRating = n;
+      starsWrap.querySelectorAll('.star').forEach(btn=>{
+        const idx = Number(btn.dataset.star);
+        btn.classList.toggle('active', idx <= n);
+        btn.setAttribute('aria-checked', idx === n ? 'true' : 'false');
+        btn.setAttribute('role','radio');
+      });
+    }
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'","&#39;");
+    }
+    function showMessage(text, ok=false){
+      rMsg.textContent = text;
+      rMsg.classList.toggle('ok', ok);
+      rMsg.classList.toggle('error', !ok);
+    }
+
+    function combinedReviews(){
+      return [...seededReviews, ...reviewsLocal];
+    }
+
+    function renderList(){
+      list.innerHTML = '';
+      const all = combinedReviews().slice().sort((a,b)=>new Date(a.date)-new Date(b.date)).reverse();
+
+      all.forEach(r=>{
+        const li = document.createElement('li');
+        li.className = 'review-item';
+        const when = new Date(r.date).toLocaleString();
+        li.innerHTML = `
+          <div class="review-head">
+            <div class="review-name">${escapeHtml(r.name)}</div>
+            <div class="review-stars">${starString(r.rating)}</div>
+          </div>
+          <div class="review-text">${escapeHtml(r.comment)}</div>
+          <small>${when}</small>
+        `;
+        if(!r.seed){
+          const actions = document.createElement('div');
+          actions.className = 'review-actions';
+          const del = document.createElement('button');
+          del.className = 'del-btn';
+          del.type = 'button';
+          del.textContent = 'Delete';
+          del.addEventListener('click', ()=>{
+            reviewsLocal = reviewsLocal.filter(x => x.id !== r.id);
+            saveLocal();
+            renderList();
+          });
+          actions.appendChild(del);
+          li.appendChild(actions);
+        }
+        list.appendChild(li);
+      });
+
+      if(!all.length){
+        const li = document.createElement('li');
+        li.className = 'review-item';
+        li.innerHTML = '<small>No reviews yet. Be the first!</small>';
+        list.appendChild(li);
+      }
+    }
+
+    // Star interactions
+    starsWrap.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.star');
+      if(!btn) return;
+      const n = Number(btn.dataset.star) || 0;
+      renderStars(n);
+    });
+    starsWrap.addEventListener('keydown', (e)=>{
+      if(!['ArrowLeft','ArrowRight'].includes(e.key)) return;
+      e.preventDefault();
+      const next = Math.min(5, Math.max(1, currentRating + (e.key === 'ArrowRight' ? 1 : -1)));
+      renderStars(next);
+    });
+
+    // Clear only local reviews
+    if(clearBtn){
+      clearBtn.addEventListener('click', ()=>{
+        if(!reviewsLocal.length) return;
+        if(confirm('Delete ALL local reviews on this device? (Seeded reviews remain)')){
+          reviewsLocal = [];
+          saveLocal();
+          renderList();
+          showMessage('All local reviews cleared.', true);
+        }
+      });
+    }
+
+    // Submit new local review
+    rForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = nameEl.value.trim();
+      const comment = commentEl.value.trim();
+      const rating = currentRating;
+
+      if(!name || !comment || rating < 1){
+        showMessage('Please add name, rating and comment.', false);
+        return;
+      }
+
+      const review = {
+        id: Date.now(),
+        name, comment, rating,
+        date: new Date().toISOString()
+      };
+      reviewsLocal.push(review);
+      saveLocal();
+      renderList();
+      rForm.reset();
+      renderStars(0);
+      showMessage('Review added.', true);
+    });
+
+    // Init
+    loadLocal();
+    renderStars(0);
+    renderList();
+  })();
+  </script>
+</body>
+</html>
