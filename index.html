@@ -184,6 +184,15 @@
       #mainNav a{ padding:6px 8px; font-size:13px; }
       .brand span{ font-size:13px; }
     }
+
+    /* === ΝΕΟ: πιο μικρή απόσταση από το header === */
+    /* Πιο «σφιχτό» ύψος στα links */
+    .nav a{ padding-top:6px; padding-bottom:6px; }
+    /* Σε mobile, ακόμη πιο σφιχτό + μικρότερο κάθετο padding του header */
+    @media (max-width:480px){
+      .nav a{ padding-top:4px; padding-bottom:4px; font-size:14px; }
+      header .container{ padding-top:8px; padding-bottom:8px; }
+    }
   </style>
 </head>
 <body>
@@ -256,7 +265,7 @@
       <h2>Services</h2>
       <div class="cards">
         <article class="card"><div class="icon">✂️</div><h3>Haircuts</h3><p>Basic haircut</p><p>Beard</p><p>Haircut &amp; Beard</p></article>
-        <article class="card"><div class="icon">🛒</div><h3>Deals</h3><p>Electronics</p><p>Clothes</p><p>Shoes</p><p>Accessories</p></article>
+        <article class="card"><div class="icon">🛒</div><h3>Deals</h3><p class="price"><span class="num">Loyalty Reward</span></p><p>Every 7th service is on us!</p></article>
         <article class="card"><div class="icon">🌿</div><h3>Lawn Mowing / Gardening</h3><p>Cut</p><p>Strim</p><p>General</p></article>
         <article class="card"><div class="icon">🚗</div><h3>Car Wash</h3><p>Wash</p><p>Mini valet</p><p>Full valet</p></article>
         <article class="card"><div class="icon">🪟</div><h3>Window Cleaning</h3><p>Basic</p><p>Advanced (limescale removal)</p></article>
