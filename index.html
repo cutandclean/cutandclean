@@ -155,11 +155,12 @@
       border-radius:14px; padding:14px;
     }
     #reviews .review-head{
-      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:6px;
+      display:flex; align-items:center; justify-content:flex-start; gap:12px; margin-bottom:6px;
+      flex-wrap:wrap;
     }
     #reviews .review-name{ font-weight:800; }
     #reviews .review-stars{ letter-spacing:2px; color:#f6c244; }
-    #reviews small{ color:var(--muted); }
+    #reviews small{ color:var(--muted); display:block; margin-top:6px; }
     #reviews .review-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:8px; }
     #reviews .del-btn, #reviews .clear-btn{
       border:1px solid rgba(255,255,255,.18);
@@ -174,7 +175,7 @@
     @media (max-width: 480px){
       header .container { padding-left: 12px; padding-right: 12px; }
       .nav{ gap:8px; }
-      #mainNav{ margin-left: 10px; }           /* φέρνουμε πιο κοντά το menu στο brand */
+      #mainNav{ margin-left: 10px; }
       #mainNav a{ padding:8px 10px; font-size:14px; }
       .brand span{ font-size:14px; }
       .logo{ width:32px; height:32px; }
@@ -185,10 +186,8 @@
       .brand span{ font-size:13px; }
     }
 
-    /* === ΝΕΟ: πιο μικρή απόσταση από το header === */
-    /* Πιο «σφιχτό» ύψος στα links */
+    /* compact header links */
     .nav a{ padding-top:6px; padding-bottom:6px; }
-    /* Σε mobile, ακόμη πιο σφιχτό + μικρότερο κάθετο padding του header */
     @media (max-width:480px){
       .nav a{ padding-top:4px; padding-bottom:4px; font-size:14px; }
       header .container{ padding-top:8px; padding-bottom:8px; }
@@ -200,8 +199,6 @@
     <div class="container nav">
       <div class="brand"><div class="logo">CC</div><span>Cut &amp; Clean</span></div>
       <nav id="mainNav">
-        <a href="#services">Services</a>
-        <a href="#prices">Pricing</a>
         <a href="#book" class="cta">Book Now</a>
       </nav>
     </div>
@@ -234,7 +231,7 @@
 
           <g transform="translate(136,24)">
             <rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/>
-            <text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🛒 Deals</text>
+            <text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🎁 Deals</text>
           </g>
 
           <g transform="translate(256,24)">
@@ -265,7 +262,7 @@
       <h2>Services</h2>
       <div class="cards">
         <article class="card"><div class="icon">✂️</div><h3>Haircuts</h3><p>Basic haircut</p><p>Beard</p><p>Haircut &amp; Beard</p></article>
-        <article class="card"><div class="icon">🛒</div><h3>Deals</h3><p class="price"><span class="num">Loyalty Reward</span></p><p>Every 7th service is on us!</p></article>
+        <article class="card"><div class="icon">🎁</div><h3>Deals</h3><p>Electronics</p><p>Clothes</p><p>Shoes</p><p>Accessories</p></article>
         <article class="card"><div class="icon">🌿</div><h3>Lawn Mowing / Gardening</h3><p>Cut</p><p>Strim</p><p>General</p></article>
         <article class="card"><div class="icon">🚗</div><h3>Car Wash</h3><p>Wash</p><p>Mini valet</p><p>Full valet</p></article>
         <article class="card"><div class="icon">🪟</div><h3>Window Cleaning</h3><p>Basic</p><p>Advanced (limescale removal)</p></article>
@@ -469,13 +466,14 @@
     }
   </script>
 
-  <!-- Reviews: seeded + localStorage demo -->
+  <!-- Reviews: seeded + localStorage + email notify -->
   <script>
   (() => {
     const LS_KEY = 'cc_reviews_demo';
     let currentRating = 0;
     let reviewsLocal = [];
 
+    // Seeded reviews (permanent examples)
     const seededReviews = [
       { id:'seed-mark',  name:'Mark',  rating:5, comment:"Mateo cut my hair and my two boys hair, they get very nervous and he put them at ease immediately. On Mateo's advice, the boys had great new styles and they have never looked better! Thanks Mateo, we will go nowhere else now!", date:'2025-08-01T10:00:00Z', seed:true },
       { id:'seed-claire',name:'Claire',rating:5, comment:"Mateo was very professional. Cut our hedges, said would be done in a day and he worked throughout. Very hard worker and great result. We have scheduled regular trims. THANK YOU! :)", date:'2025-08-05T12:30:00Z', seed:true },
@@ -486,6 +484,7 @@
       { id:'seed-mh',    name:'MH',    rating:5, comment:"Made an excellent job of my Mustang! Mini valet and would have thought it had a full one! Amazing value from a true gent! Superb work!", date:'2025-08-20T15:45:00Z', seed:true }
     ];
 
+    // Elements
     const rForm = document.getElementById('reviewForm');
     const nameEl = document.getElementById('rev-name');
     const commentEl = document.getElementById('rev-comment');
@@ -496,6 +495,7 @@
 
     if(!rForm || !starsWrap || !list) return;
 
+    // Helpers
     function loadLocal(){
       try { reviewsLocal = JSON.parse(localStorage.getItem(LS_KEY)) || []; }
       catch { reviewsLocal = []; }
@@ -594,8 +594,8 @@
       });
     }
 
-    // Submit new local review
-    rForm.addEventListener('submit', (e)=>{
+    // ===== Submit new review (local + email notification via Formspree) =====
+    rForm.addEventListener('submit', async (e)=>{
       e.preventDefault();
       const name = nameEl.value.trim();
       const comment = commentEl.value.trim();
@@ -606,17 +606,34 @@
         return;
       }
 
-      const review = {
-        id: Date.now(),
-        name, comment, rating,
-        date: new Date().toISOString()
-      };
+      // Save locally
+      const review = { id: Date.now(), name, comment, rating, date: new Date().toISOString() };
       reviewsLocal.push(review);
       saveLocal();
       renderList();
       rForm.reset();
       renderStars(0);
       showMessage('Review added.', true);
+
+      // Send email notification through Formspree (same endpoint as booking)
+      try {
+        const fs = new FormData();
+        fs.append('_subject', 'New Review — Cut & Clean');
+        fs.append('form-name', 'cut-clean-review');
+        fs.append('name', name);
+        fs.append('rating', String(rating));
+        fs.append('comment', comment);
+
+        await fetch('https://formspree.io/f/xjkonwor', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: fs
+        });
+
+        showMessage('Review added .', true);
+      } catch(err){
+        showMessage('Review saved. Please check connection.', false);
+      }
     });
 
     // Init
