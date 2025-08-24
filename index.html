@@ -169,6 +169,21 @@
     #reviews .del-btn:hover, #reviews .clear-btn:hover{ background:rgba(255,255,255,.12); }
 
     @media (min-width: 1400px){ .container{max-width:1200px} }
+
+    /* === FIX: μικρότερο κενό brand–menu για να χωράει το Book Now === */
+    @media (max-width: 480px){
+      header .container { padding-left: 12px; padding-right: 12px; }
+      .nav{ gap:8px; }
+      #mainNav{ margin-left: 10px; }           /* φέρνουμε πιο κοντά το menu στο brand */
+      #mainNav a{ padding:8px 10px; font-size:14px; }
+      .brand span{ font-size:14px; }
+      .logo{ width:32px; height:32px; }
+    }
+    @media (max-width: 380px){
+      #mainNav{ margin-left: 8px; }
+      #mainNav a{ padding:6px 8px; font-size:13px; }
+      .brand span{ font-size:13px; }
+    }
   </style>
 </head>
 <body>
@@ -191,16 +206,48 @@
         <p>Fast, reliable and affordable — book an appointment in 30 seconds.</p>
       </div>
       <div>
-        <!-- 5-tile illustration -->
+        <!-- 6-tile illustration (3×2) with Deals after Haircuts -->
         <svg viewBox="0 0 380 220" width="100%" height="100%" role="img" aria-label="Service icons">
-          <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#6dd3ff"/><stop offset="1" stop-color="#90ffb3"/></linearGradient></defs>
-          <rect x="0" y="0" width="380" height="220" rx="18" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.08)"/>
-          <g transform="translate(16,24)"><rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/><text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">✂️ Haircuts</text></g>
-          <g transform="translate(136,24)"><rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/><text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🌿 Lawn</text></g>
-          <g transform="translate(256,24)"><rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/><text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🚗 Car</text></g>
-          <g transform="translate(76,110)"><rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/><text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🪟 Windows</text></g>
-          <g transform="translate(196,110)"><rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/><text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🧼 Power</text></g>
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#6dd3ff"/><stop offset="1" stop-color="#90ffb3"/>
+            </linearGradient>
+          </defs>
+
+          <rect x="0" y="0" width="380" height="220" rx="18"
+                fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.08)"/>
+
+          <!-- row 1 -->
+          <g transform="translate(16,24)">
+            <rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/>
+            <text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">✂️ Haircuts</text>
+          </g>
+
+          <g transform="translate(136,24)">
+            <rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/>
+            <text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🛒 Deals</text>
+          </g>
+
+          <g transform="translate(256,24)">
+            <rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/>
+            <text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🌿 Lawn</text>
+          </g>
+
+          <!-- row 2 -->
+          <g transform="translate(16,110)">
+            <rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/>
+            <text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🚗 Car</text>
+          </g>
+
+          <g transform="translate(136,110)">
+            <rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/>
+            <text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🪟 Windows</text>
+          </g>
+
+          <g transform="translate(256,110)">
+            <rect width="108" height="70" rx="12" fill="rgba(255,255,255,.06)"/>
+            <text x="54" y="44" text-anchor="middle" fill="url(#g1)" font-weight="700">🧼 Power</text>
+          </g>
         </svg>
       </div>
     </section>
@@ -209,6 +256,7 @@
       <h2>Services</h2>
       <div class="cards">
         <article class="card"><div class="icon">✂️</div><h3>Haircuts</h3><p>Basic haircut</p><p>Beard</p><p>Haircut &amp; Beard</p></article>
+        <article class="card"><div class="icon">🛒</div><h3>Deals</h3><p>Electronics</p><p>Clothes</p><p>Shoes</p><p>Accessories</p></article>
         <article class="card"><div class="icon">🌿</div><h3>Lawn Mowing / Gardening</h3><p>Cut</p><p>Strim</p><p>General</p></article>
         <article class="card"><div class="icon">🚗</div><h3>Car Wash</h3><p>Wash</p><p>Mini valet</p><p>Full valet</p></article>
         <article class="card"><div class="icon">🪟</div><h3>Window Cleaning</h3><p>Basic</p><p>Advanced (limescale removal)</p></article>
@@ -289,7 +337,6 @@
         <label for="notes">Notes</label>
         <textarea id="notes" name="notes" placeholder="Preferred times and dates"></textarea>
 
-        <!-- Left-aligned reCAPTCHA-style box -->
         <div class="captcha" role="group" aria-labelledby="captcha-label">
           <input type="checkbox" id="notrobot" required aria-describedby="captcha-label">
           <label id="captcha-label" for="notrobot">I’m not a robot*</label>
@@ -301,7 +348,7 @@
       <p class="note">We’ll confirm your preferred times by phone or email.</p>
     </section>
 
-    <!-- REVIEWS (seeded + local) -->
+    <!-- REVIEWS -->
     <section id="reviews" class="section">
       <h2>Reviews</h2>
 
@@ -334,7 +381,7 @@
     <div class="container"><small>© <span id="year"></span> Cut &amp; Clean</small></div>
   </footer>
 
-  <!-- Sticky Call button — ALL devices, ALWAYS bottom-right -->
+  <!-- Sticky Call button -->
   <a class="callnow" href="tel:+306971580635" aria-label="Call Cut & Clean now">Call now</a>
 
   <!-- THANK YOU OVERLAY -->
@@ -358,7 +405,7 @@
     // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Change "More options" <summary> to "Less options" when opened
+    // Toggle summary text
     document.addEventListener('DOMContentLoaded', function () {
       document.querySelectorAll('details').forEach((det)=>{
         const summary = det.querySelector('summary');
@@ -420,67 +467,16 @@
     let currentRating = 0;
     let reviewsLocal = [];
 
-    // ====== 7 SEEDED (permanent) reviews shown on all browsers ======
     const seededReviews = [
-      {
-        id: 'seed-mark',
-        name: 'Mark',
-        rating: 5,
-        comment: "Mateo cut my hair and my two boys hair, they get very nervous and he put them at ease immediately. On Mateo's advice, the boys had great new styles and they have never looked better! Thanks Mateo, we will go nowhere else now!",
-        date: '2025-08-01T10:00:00Z',
-        seed: true
-      },
-      {
-        id: 'seed-claire',
-        name: 'Claire',
-        rating: 5,
-        comment: "Mateo was very professional. Cut our hedges, said would be done in a day and he worked throughout. Very hard worker and great result. We have scheduled regular trims. THANK YOU! :)",
-        date: '2025-08-05T12:30:00Z',
-        seed: true
-      },
-      {
-        id: 'seed-james',
-        name: 'James',
-        rating: 5,
-        comment: "Power hosed our driveway — turned up on time, spotless finish and fair price. Looks brand new.",
-        date: '2025-07-28T09:15:00Z',
-        seed: true
-      },
-      {
-        id: 'seed-aoife',
-        name: 'Aoife',
-        rating: 5,
-        comment: "Window cleaning was brilliant. Frames and sills carefully done, everything sparkling. Highly recommend!",
-        date: '2025-07-30T16:45:00Z',
-        seed: true
-      },
-      {
-        id: 'seed-liam',
-        name: 'Liam',
-        rating: 5,
-        comment: "Full car valet — car looked like new afterwards. Small delay starting but he kept me informed. Great job overall.",
-        date: '2025-08-10T14:10:00Z',
-        seed: true
-      },
-      {
-        id: 'seed-sarah',
-        name: 'Sarah',
-        rating: 5,
-        comment: "Lawn mowing & edging — super neat lines and tidy clean-up. We’ve booked fortnightly visits now.",
-        date: '2025-08-15T11:20:00Z',
-        seed: true
-      },
-      {
-        id: 'seed-mh',
-        name: 'MH',
-        rating: 5,
-        comment: "Made an excellent job of my Mustang! Mini valet and would have thought it had a full one! Amazing value from a true gent! Superb work!",
-        date: '2025-08-20T15:45:00Z',
-        seed: true
-      }
+      { id:'seed-mark',  name:'Mark',  rating:5, comment:"Mateo cut my hair and my two boys hair, they get very nervous and he put them at ease immediately. On Mateo's advice, the boys had great new styles and they have never looked better! Thanks Mateo, we will go nowhere else now!", date:'2025-08-01T10:00:00Z', seed:true },
+      { id:'seed-claire',name:'Claire',rating:5, comment:"Mateo was very professional. Cut our hedges, said would be done in a day and he worked throughout. Very hard worker and great result. We have scheduled regular trims. THANK YOU! :)", date:'2025-08-05T12:30:00Z', seed:true },
+      { id:'seed-james', name:'James', rating:5, comment:"Power hosed our driveway — turned up on time, spotless finish and fair price. Looks brand new.", date:'2025-07-28T09:15:00Z', seed:true },
+      { id:'seed-aoife', name:'Aoife', rating:5, comment:"Window cleaning was brilliant. Frames and sills carefully done, everything sparkling. Highly recommend!", date:'2025-07-30T16:45:00Z', seed:true },
+      { id:'seed-liam',  name:'Liam',  rating:4, comment:"Full car valet — car looked like new afterwards. Small delay starting but he kept me informed. Great job overall.", date:'2025-08-10T14:10:00Z', seed:true },
+      { id:'seed-sarah', name:'Sarah', rating:5, comment:"Lawn mowing & edging — super neat lines and tidy clean-up. We’ve booked fortnightly visits now.", date:'2025-08-15T11:20:00Z', seed:true },
+      { id:'seed-mh',    name:'MH',    rating:5, comment:"Made an excellent job of my Mustang! Mini valet and would have thought it had a full one! Amazing value from a true gent! Superb work!", date:'2025-08-20T15:45:00Z', seed:true }
     ];
 
-    // Elements
     const rForm = document.getElementById('reviewForm');
     const nameEl = document.getElementById('rev-name');
     const commentEl = document.getElementById('rev-comment');
@@ -491,7 +487,6 @@
 
     if(!rForm || !starsWrap || !list) return;
 
-    // Helpers
     function loadLocal(){
       try { reviewsLocal = JSON.parse(localStorage.getItem(LS_KEY)) || []; }
       catch { reviewsLocal = []; }
@@ -499,11 +494,7 @@
     function saveLocal(){
       try { localStorage.setItem(LS_KEY, JSON.stringify(reviewsLocal)); } catch {}
     }
-    function starString(n){
-      const full = '★'.repeat(n);
-      const empty = '☆'.repeat(5 - n);
-      return full + empty;
-    }
+    function starString(n){ return '★'.repeat(n) + '☆'.repeat(5-n); }
     function renderStars(n){
       currentRating = n;
       starsWrap.querySelectorAll('.star').forEach(btn=>{
@@ -515,21 +506,15 @@
     }
     function escapeHtml(s){
       return String(s)
-        .replaceAll('&','&amp;')
-        .replaceAll('<','&lt;')
-        .replaceAll('>','&gt;')
-        .replaceAll('"','&quot;')
-        .replaceAll("'","&#39;");
+        .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+        .replaceAll('"','&quot;').replaceAll("'","&#39;");
     }
     function showMessage(text, ok=false){
       rMsg.textContent = text;
       rMsg.classList.toggle('ok', ok);
       rMsg.classList.toggle('error', !ok);
     }
-
-    function combinedReviews(){
-      return [...seededReviews, ...reviewsLocal];
-    }
+    function combinedReviews(){ return [...seededReviews, ...reviewsLocal]; }
 
     function renderList(){
       list.innerHTML = '';
