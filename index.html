@@ -196,7 +196,8 @@
 </head>
 <body>
   <header>
-    <div class="container nav">
+    <!-- ΜΟΝΗ ΑΛΛΑΓΗ: space-between για να πάει το Book Now δεξιά -->
+    <div class="container nav" style="display:flex;align-items:center;justify-content:space-between;">
       <div class="brand"><div class="logo">CC</div><span>Cut &amp; Clean</span></div>
       <nav id="mainNav">
         <a href="#book" class="cta">Book Now</a>
@@ -262,7 +263,13 @@
       <h2>Services</h2>
       <div class="cards">
         <article class="card"><div class="icon">✂️</div><h3>Haircuts</h3><p>Basic haircut</p><p>Beard</p><p>Haircut &amp; Beard</p></article>
-        <article class="card"><div class="icon">🎁</div><h3>Deals</h3><p>Electronics</p><p>Clothes</p><p>Shoes</p><p>Accessories</p></article>
+        
+        <article class="card"><div class="icon">🎁</div><h3>Deals</h3>
+          <p class="price"><span class="num">Lowalty Card</span></p>  
+          <p>Every 7 bookings, the next one is on us!</p>
+          
+          </p></article>
+        
         <article class="card"><div class="icon">🌿</div><h3>Lawn Mowing / Gardening</h3><p>Cut</p><p>Strim</p><p>General</p></article>
         <article class="card"><div class="icon">🚗</div><h3>Car Wash</h3><p>Wash</p><p>Mini valet</p><p>Full valet</p></article>
         <article class="card"><div class="icon">🪟</div><h3>Window Cleaning</h3><p>Basic</p><p>Advanced (limescale removal)</p></article>
